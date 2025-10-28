@@ -2,6 +2,16 @@
 
 A CLI tool for automating Excel data processing with web crawling capabilities.
 
+| Short | Long                  | Required | Description                                                                              | Example                |
+| ----- | --------------------- | -------- | ---------------------------------------------------------------------------------------- | ---------------------- |
+| `-d`  | `--file-path`         | ✅ Yes    | Path to the Excel file you want to read.                                                 | `-d ./data/input.xlsx` |
+| `-s`  | `--sheet-name`        | ❌ No     | Name of the sheet to read from. If not provided, defaults to the active sheet.           | `-s Sheet1`            |
+| `-f`  | `--from`              | ✅ Yes    | Starting cell address (e.g., A1).                                                        | `-f A1`                |
+| `-t`  | `--to`                | ✅ Yes    | Ending cell address (e.g., D10).                                                         | `-t D10`               |
+| `-o`  | `--output`            | ✅ Yes     | Two output start cells (space-separated). First cell for write chatbot response, second cell for write references.    | `-o A1 B1`             |
+| `-os` | `--output-sheet-name` | ❌ No     | Sheet name where to write the output. If not provided, defaults to the active sheet. | `-os OutputSheet`      |
+
+
 ## Prerequisites
 
 - Python 3.8+
