@@ -13,3 +13,5 @@ wheels/
 *.spec
 build/
 dist/
+
+.env
