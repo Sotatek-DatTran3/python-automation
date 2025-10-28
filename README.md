@@ -1,6 +1,7 @@
 # Python Automation Tool
 
-A CLI tool for automating Excel data processing with web crawling capabilities.
+A  CLI tool automates the process of testing chatbot queries using data stored in Excel files.
+It reads test prompts (queries) from a specified range in an Excel sheet, sends them to a chatbot for processing, retrieves the chatbot’s responses and reference documents, and then writes the results back into an output sheet or specific cells in the same file.
 
 Example usage:
 ```sh
