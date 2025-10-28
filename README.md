@@ -2,6 +2,11 @@
 
 A CLI tool for automating Excel data processing with web crawling capabilities.
 
+Example usage:
+```sh
+.\python-automation-cli.exe read -d "C:\Users\ddat8\Documents\Work\ProcessingServiceEvaluation.xlsx" -s "テストデータ"  -f C3 -t C30 -o E3 J3
+```
+
 | Short | Long                  | Required | Description                                                                              | Example                |
 | ----- | --------------------- | -------- | ---------------------------------------------------------------------------------------- | ---------------------- |
 | `-d`  | `--file-path`         | ✅ Yes    | Path to the Excel file you want to read.                                                 | `-d ./data/input.xlsx` |
@@ -14,7 +19,7 @@ A CLI tool for automating Excel data processing with web crawling capabilities.
 
 ## Prerequisites
 
-- Python 3.8+
+- Python 3.11+
 - [uv](https://github.com/astral-sh/uv) package manager
 - Microsoft Edge browser (for Selenium WebDriver)
 
