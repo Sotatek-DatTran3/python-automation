@@ -81,12 +81,12 @@ def crawl_answer(queries: list[str]):
                 else:
                     stable_count = 0
                     last_texts = responses
-                    
+
             except StaleElementReferenceException:
                 time.sleep(1)
                 continue
 
-            time.sleep(1)
+        time.sleep(1)
 
         document_refs = driver.find_elements(By.XPATH, "//div[contains(@class, 'text-[#6E6F7C')]/following-sibling::div[contains(@class, 'border')]//span")
 
