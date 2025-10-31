@@ -41,21 +41,21 @@ def crawl_answer(queries: list[str]):
 
     # ===== Log in =====
     email_input_el = wait.until(
-        EC.presence_of_element_located((By.XPATH, "//input[@type='email' and @placeholder='あなたのメールアドレス']"))
+        EC.presence_of_element_located((By.XPATH, "//input[@type='email' and @placeholder='Your email address']"))
     )
-    password_input_el = driver.find_element(By.XPATH, "//input[@type='password' and @placeholder='あなたのパスワード']")
+    password_input_el = driver.find_element(By.XPATH, "//input[@type='password' and @placeholder='Your password']")
 
     email_input_el.clear()
     email_input_el.send_keys(os.environ.get("log_mail", ""))
     password_input_el.clear()
     password_input_el.send_keys(os.environ.get("log_pass", ""))
 
-    driver.find_element(By.XPATH, "//button[.//span[normalize-space(text())='ログイン']]").click()
+    driver.find_element(By.XPATH, "//button[.//span[normalize-space(text())='Login']]").click()
 
     # ===== Query =====
     for query in queries:
         query_input_el = wait.until(
-            EC.presence_of_element_located((By.XPATH, "//textarea[@placeholder='何でも質問してください...']"))
+            EC.presence_of_element_located((By.XPATH, "//textarea[@placeholder='Ask anything...']"))
         )
         query_input_el.click()
         query_input_el.send_keys(query)
@@ -63,30 +63,40 @@ def crawl_answer(queries: list[str]):
         driver.find_element(By.XPATH, "//button[.//img[@alt='icon-send']]").click()
         time.sleep(3)
 
-        answer_el = driver.find_element(By.XPATH, "//div[contains(@class, 'justify-start')]//div[contains(@class, 'prose-img:my-0')]")
-        last_text = ""
         stable_count = 0
+        last_texts = []
 
         while stable_count < 3:
-            current_text = answer_el.text
-            if current_text == last_text:
+            answer_el = driver.find_elements(
+                By.XPATH,
+                "//div[contains(@class, 'prose-img')]"
+            )
+
+            responses = [el.text for el in answer_el]
+
+            # Check if content is stable
+            if responses == last_texts:
                 stable_count += 1
             else:
                 stable_count = 0
-                last_text = current_text
+                last_texts = responses
+
             time.sleep(1)
 
-        document_refs = driver.find_elements(By.XPATH, "//div[contains(text(), '情報源')]/following-sibling::div//span[contains(@class, 'text-[#27283C]')]")
+        document_refs = driver.find_elements(By.XPATH, "//div[contains(@class, 'text-[#6E6F7C')]/following-sibling::div[contains(@class, 'border')]//span")
+
+        responses = [r for r in responses if r.strip()]
+        full_response = "\n".join(responses)
 
         file_names = [doc_ref.text for doc_ref in document_refs if doc_ref.text.strip() != ""]
         result.append({
-            "answer": answer_el.text,
+            "answer": full_response,
             "references": file_names
         })
 
-        driver.refresh()
+        driver.find_element(By.XPATH, "//button[.//img[@alt='icon-add']]").click()
 
-    time.sleep(2)        
+    time.sleep(2)
     driver.quit()
 
     return result
