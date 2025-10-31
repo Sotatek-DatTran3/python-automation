@@ -85,8 +85,9 @@ def crawl_answer(queries: list[str]):
             except StaleElementReferenceException:
                 time.sleep(1)
                 continue
+            time.sleep(1)
 
-        time.sleep(1)
+        time.sleep(0.5)
 
         document_refs = driver.find_elements(By.XPATH, "//div[contains(@class, 'text-[#6E6F7C')]/following-sibling::div[contains(@class, 'border')]//span")
 
@@ -98,6 +99,11 @@ def crawl_answer(queries: list[str]):
             "answer": full_response,
             "references": file_names
         })
+
+        print("\n---")
+        print("Completed query:", query)
+        print(f"Response {full_response[:100]}...")
+        print("References:", file_names, "\n")
 
         driver.find_element(By.XPATH, "//button[.//img[@alt='icon-add']]").click()
 
