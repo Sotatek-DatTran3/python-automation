@@ -96,7 +96,7 @@ def crawl_answer(queries: list[str]):
 
         driver.find_element(By.XPATH, "//button[.//img[@alt='icon-add']]").click()
 
-    time.sleep(2)
+    input("Press Enter to close the browser...")
     driver.quit()
 
     return result
