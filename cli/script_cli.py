@@ -32,7 +32,7 @@ def main() -> None:
             print(f"Output start from: {args.output_cell}")
             print(f"Output sheet name: {args.output_sheet_name if args.output_sheet_name else 'Active Sheet'}\n")
 
-            result = handle_excel_command(args.file_path, (args.cell_from, args.cell_to), args.output_cell, args.sheet_name)
+            result = handle_excel_command(args.file_path, (args.cell_from, args.cell_to), args.output_cell, args.sheet_name, args.output_sheet_name)
             if result is not None:
                 print(result)
         case _:

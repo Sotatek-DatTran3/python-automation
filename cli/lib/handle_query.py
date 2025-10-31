@@ -3,7 +3,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.edge.service import Service
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import StaleElementReferenceException
 from selenium.webdriver.common.keys import Keys
 import sys
 import os
@@ -67,19 +67,24 @@ def crawl_answer(queries: list[str]):
         last_texts = []
 
         while stable_count < 3:
-            answer_el = driver.find_elements(
-                By.XPATH,
-                "//div[contains(@class, 'prose-img')]"
-            )
+            try: 
+                answer_el = driver.find_elements(
+                    By.XPATH,
+                    "//div[contains(@class, 'prose-img')]"
+                )
 
-            responses = [el.text for el in answer_el]
+                responses = [el.text for el in answer_el]
 
-            # Check if content is stable
-            if responses == last_texts:
-                stable_count += 1
-            else:
-                stable_count = 0
-                last_texts = responses
+                # Check if content is stable
+                if responses == last_texts:
+                    stable_count += 1
+                else:
+                    stable_count = 0
+                    last_texts = responses
+                    
+            except StaleElementReferenceException:
+                time.sleep(1)
+                continue
 
             time.sleep(1)
 
@@ -96,7 +101,4 @@ def crawl_answer(queries: list[str]):
 
         driver.find_element(By.XPATH, "//button[.//img[@alt='icon-add']]").click()
 
-    input("Press Enter to close the browser...")
-    driver.quit()
-
-    return result
+    return result, driver
