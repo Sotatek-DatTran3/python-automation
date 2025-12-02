@@ -1,3 +1,6 @@
+> [!WARNING]
+> This tool just use for specific website. In briefly, it track html and interact with it. If you want to use in another website, change the code logic
+
 # Python Automation Tool
 
 A  CLI tool automates the process of testing chatbot queries using data stored in Excel files.
