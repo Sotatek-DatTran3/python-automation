@@ -27,7 +27,7 @@ def load_environment():
     print(f"Loaded .env from {env_path}")
     return env_path
 
-def crawl_answer(queries: list[str], start: int = 0, is_headless: bool = False):
+def crawl_answer(queries: list[str], start: str, is_headless: bool = False):
     load_environment()
 
     result = []

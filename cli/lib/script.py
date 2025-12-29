@@ -13,7 +13,8 @@ def handle_excel_command(file_path, cell_range: tuple[str, str], output_cells: l
     responses, driver = crawl_answer(queries=queries, start=int(start_cell), is_headless=is_headless)
 
     print("Writing back to Excel file...")
-    excel_handler.write_excel_file(data=responses, output_cells=output_cells, sheet_name=output_sheet_name)
+    target_sheet = output_sheet_name if output_sheet_name is not None else sheet_name
+    excel_handler.write_excel_file(data=responses, output_cells=output_cells, sheet_name=target_sheet)
 
     print("\nExcel saved. Compare data in Excel with the web, then press Enter to close the browser...")
     input("\nPress Enter to close the browser...")
