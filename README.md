@@ -19,6 +19,7 @@ Example usage:
 | `-t`  | `--to`                | ✅ Yes    | Ending cell address (e.g., D10).                                                         | `-t D10`               |
 | `-o`  | `--output`            | ✅ Yes     | Two output start cells (space-separated). First cell for write chatbot response, second cell for write references.    | `-o A1 B1`             |
 | `-os` | `--output-sheet-name` | ❌ No     | Sheet name where to write the output. If not provided, defaults to the active sheet. | `-os OutputSheet`      |
+| `-`    | `--headless`         | ❌ No     | Run the browser in headless mode (no visible window). Useful for running on servers or in the background. | `--headless`           |
 
 
 ## Prerequisites
@@ -65,7 +66,8 @@ uv run python cli/script_cli.py --help
 
 Example usage:
 ```sh
-uv run python cli/script_cli.py read --file-path data.xlsx --cell_from A1 --cell_to A10 --output_cell B2 C2 --sheet-name Sheet1
+uv run python cli/script_cli.py read --file-path data.xlsx --from A1 --to A10 --output B2 C2 --sheet-name Sheet1
+uv run python cli/script_cli.py read --file-path data.xlsx --from A1 --to A10 --output B2 C2 --sheet-name Sheet1 --headless
 ```
 
 ## Building Executable

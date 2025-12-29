@@ -16,6 +16,9 @@ def main() -> None:
     read_parser.add_argument("-o","--output", dest="output_cell", type=str, nargs=2, help="Two output start cell (e.g., A1, B1)")
     read_parser.add_argument("-os","--output-sheet-name", dest="output_sheet_name", type=str, help="Name of the sheet to write output", default=None)
 
+    # add headless option
+    read_parser.add_argument("--headless", action="store_true", help="Run browser in headless mode")
+
 
     args = parser.parse_args()
 
@@ -32,7 +35,7 @@ def main() -> None:
             print(f"Output start from: {args.output_cell}")
             print(f"Output sheet name: {args.output_sheet_name if args.output_sheet_name else 'Active Sheet'}\n")
 
-            result = handle_excel_command(args.file_path, (args.cell_from, args.cell_to), args.output_cell, args.sheet_name, args.output_sheet_name)
+            result = handle_excel_command(args.file_path, (args.cell_from, args.cell_to), args.output_cell, args.sheet_name, args.output_sheet_name, args.headless)
             if result is not None:
                 print(result)
         case _:

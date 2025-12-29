@@ -1,6 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.edge.service import Service
+from selenium.webdriver.firefox.service import Service as FirefoxService
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import StaleElementReferenceException
@@ -26,31 +27,34 @@ def load_environment():
     print(f"Loaded .env from {env_path}")
     return env_path
 
-def crawl_answer(queries: list[str]):
+def crawl_answer(queries: list[str], start: int = 0, is_headless: bool = False):
     load_environment()
 
     result = []
 
     options = webdriver.EdgeOptions()
-    options.add_experimental_option("detach", True)
-    driver = webdriver.Edge(options=options)
+    if is_headless: 
+        options.add_argument("--headless")
+    # options.add_experimental_option("detach", True)
+    # driver = webdriver.Edge(options=options)
+    driver = webdriver.Edge(service=Service(), options=options)
 
     driver.get(os.environ.get("host"))
 
     wait = WebDriverWait(driver, 40)
 
     # ===== Log in =====
-    email_input_el = wait.until(
-        EC.presence_of_element_located((By.XPATH, "//input[@type='email' and @placeholder='Your email address']"))
-    )
-    password_input_el = driver.find_element(By.XPATH, "//input[@type='password' and @placeholder='Your password']")
+    # email_input_el = wait.until(
+    #     EC.presence_of_element_located((By.XPATH, "//input[@type='email' and @placeholder='Your email address']"))
+    # )
+    # password_input_el = driver.find_element(By.XPATH, "//input[@type='password' and @placeholder='Your password']")
 
-    email_input_el.clear()
-    email_input_el.send_keys(os.environ.get("log_mail", ""))
-    password_input_el.clear()
-    password_input_el.send_keys(os.environ.get("log_pass", ""))
+    # email_input_el.clear()
+    # email_input_el.send_keys(os.environ.get("log_mail", ""))
+    # password_input_el.clear()
+    # password_input_el.send_keys(os.environ.get("log_pass", ""))
 
-    driver.find_element(By.XPATH, "//button[.//span[normalize-space(text())='Login']]").click()
+    # driver.find_element(By.XPATH, "//button[.//span[normalize-space(text())='Login']]").click()
 
     # ===== Query =====
     for query in queries:
@@ -61,7 +65,7 @@ def crawl_answer(queries: list[str]):
         query_input_el.send_keys(query)
 
         driver.find_element(By.XPATH, "//button[.//img[@alt='icon-send']]").click()
-        time.sleep(3)
+        time.sleep(2)
 
         stable_count = 0
         last_texts = []
@@ -83,11 +87,11 @@ def crawl_answer(queries: list[str]):
                     last_texts = responses
 
             except StaleElementReferenceException:
-                time.sleep(1)
+                time.sleep(0.5)
                 continue
-            time.sleep(1)
+            time.sleep(0.8)
 
-        time.sleep(0.5)
+        time.sleep(0.8)
 
         document_refs = driver.find_elements(By.XPATH, "//div[contains(@class, 'text-[#6E6F7C')]/following-sibling::div[contains(@class, 'border')]//span")
 
@@ -101,10 +105,10 @@ def crawl_answer(queries: list[str]):
         })
 
         print("\n---")
-        print("Completed query:", query)
+        print(f"Query {start}: {query}")
         print(f"Response {full_response[:100]}...")
         print("References:", file_names, "\n")
-
+        start += 1
         driver.find_element(By.XPATH, "//button[.//img[@alt='icon-add']]").click()
 
     return result, driver
